@@ -10,12 +10,19 @@ terraform {
 locals {
   trigramme = "ALEXIS_TEST"
   oauthclient_id = {
-    dev  = ""
-    prod = ""
+    dev     = var.DEV_CLIENT_ID
+    staging = ""
+    prod    = ""
   }
   oauthclient_secret = {
-    dev  = ""
-    prod = ""
+    dev     = var.DEV_CLIENT_SECRET
+    staging = ""
+    prod    = ""
+  }
+  aws_region = {
+    dev     = var.DEV_AWS_REGION
+    staging = ""
+    prod    = ""
   }
 }
 
