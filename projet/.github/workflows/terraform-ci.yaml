@@ -3,10 +3,10 @@ name: Terraform Pipeline
 on:
   push:
     branches:
-      - main  # Déclenche sur les pushs sur la branche 'main'
+      - main
   pull_request:
     branches:
-      - main  # Déclenche sur les pull requests vers la branche 'main'
+      - main
 
 jobs:
   terraform:
@@ -16,35 +16,27 @@ jobs:
     steps:
       # Checkout le code du dépôt
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4  # Utilisation de Node.js 20
 
-      # Naviguer dans le répertoire 'projet'
-      - name: Change directory to projet
-        working-directory: projet
-        run: echo "Moved to the project directory"
-
-      # Configurer Terraform
+      # Configurer Terraform avec Node.js 20
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
+        uses: hashicorp/setup-terraform@v3  # Utilisation de Node.js 20
         with:
           terraform_version: 1.9.5
 
       # Initialiser Terraform
       - name: Terraform Init
-        run: terraform init
-        working-directory: projet
+        run: terraform -chdir=projet init
 
       # Terraform Plan
       - name: Terraform Plan
-        run: terraform plan -var "DEV_CLIENT_ID=${{ secrets.DEV_CLIENT_ID }}" \
-                            -var "DEV_CLIENT_SECRET=${{ secrets.DEV_CLIENT_SECRET }}" \
-                            -var "DEV_AWS_REGION=${{ secrets.DEV_AWS_REGION }}"
-        working-directory: projet
+        run: terraform -chdir=projet plan -var "DEV_CLIENT_ID=${{ secrets.DEV_CLIENT_ID }}" \
+                                           -var "DEV_CLIENT_SECRET=${{ secrets.DEV_CLIENT_SECRET }}" \
+                                           -var "DEV_AWS_REGION=${{ secrets.DEV_AWS_REGION }}"
 
       # Terraform Apply
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main'
-        run: terraform apply -auto-approve -var "DEV_CLIENT_ID=${{ secrets.DEV_CLIENT_ID }}" \
-                                           -var "DEV_CLIENT_SECRET=${{ secrets.DEV_CLIENT_SECRET }}" \
-                                           -var "DEV_AWS_REGION=${{ secrets.DEV_AWS_REGION }}"
-        working-directory: projet
+        run: terraform -chdir=projet apply -auto-approve -var "DEV_CLIENT_ID=${{ secrets.DEV_CLIENT_ID }}" \
+                                                       -var "DEV_CLIENT_SECRET=${{ secrets.DEV_CLIENT_SECRET }}" \
+                                                       -var "DEV_AWS_REGION=${{ secrets.DEV_AWS_REGION }}"
