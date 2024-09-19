@@ -33,5 +33,5 @@ provider "genesyscloud" {
 }
 
 resource "genesyscloud_routing_wrapupcode" "erreur_numero" {
-  name = "Erreur numéro Alexis Test"
+  name = "Erreur numéro Alexis Test 2"
 }
