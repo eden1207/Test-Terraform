@@ -3,10 +3,10 @@ name: Terraform Pipeline
 on:
   push:
     branches:
-      - main  # Déclencher uniquement sur les push sur la branche 'main'
+      - main  # Déclenche sur les pushs sur la branche 'main'
   pull_request:
     branches:
-      - main  # Déclencher sur les pull requests vers la branche 'main'
+      - main  # Déclenche sur les pull requests vers la branche 'main'
 
 jobs:
   terraform:
@@ -18,37 +18,33 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-        # Naviguer dans le répertoire 'projet'
+      # Naviguer dans le répertoire 'projet'
       - name: Change directory to projet
-        run: cd projet
+        working-directory: projet
+        run: echo "Moved to the project directory"
 
       # Configurer Terraform
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
         with:
-          terraform_version: 1.9.5 # La version de Terraform que vous souhaitez utiliser
+          terraform_version: 1.9.5
 
       # Initialiser Terraform
       - name: Terraform Init
         run: terraform init
+        working-directory: projet
 
-      # Ajouter les secrets dans les variables d'environnement
-      - name: Set environment variables
-        run: echo "Setting environment variables"
-        env:
-          DEV_CLIENT_ID: ${{ secrets.DEV_CLIENT_ID }}
-          DEV_CLIENT_SECRET: ${{ secrets.DEV_CLIENT_SECRET }}
-          DEV_AWS_REGION: ${{ secrets.DEV_AWS_REGION }}
-
-      # Terraform Plan - Créer un plan d'exécution Terraform
+      # Terraform Plan
       - name: Terraform Plan
         run: terraform plan -var "DEV_CLIENT_ID=${{ secrets.DEV_CLIENT_ID }}" \
                             -var "DEV_CLIENT_SECRET=${{ secrets.DEV_CLIENT_SECRET }}" \
                             -var "DEV_AWS_REGION=${{ secrets.DEV_AWS_REGION }}"
+        working-directory: projet
 
-      # Terraform Apply - Appliquer le plan (vous pouvez le conditionner)
+      # Terraform Apply
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main'
         run: terraform apply -auto-approve -var "DEV_CLIENT_ID=${{ secrets.DEV_CLIENT_ID }}" \
                                            -var "DEV_CLIENT_SECRET=${{ secrets.DEV_CLIENT_SECRET }}" \
                                            -var "DEV_AWS_REGION=${{ secrets.DEV_AWS_REGION }}"
+        working-directory: projet
