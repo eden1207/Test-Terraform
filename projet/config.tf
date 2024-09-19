@@ -32,6 +32,6 @@ provider "genesyscloud" {
   aws_region         = var.DEV_AWS_REGION
 }
 
-resource "genesyscloud_routing_wrapupcode" "erreur_numero" {
+resource "genesyscloud_routing_wrapupcod" "erreur_numero" {
   name = "Erreur numéro Alexis Test"
 }
