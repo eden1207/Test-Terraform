@@ -16,7 +16,7 @@ jobs:
     steps:
       # Checkout le code du dépôt
       - name: Checkout Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       # Naviguer dans le répertoire 'projet'
       - name: Change directory to projet
@@ -25,7 +25,7 @@ jobs:
 
       # Configurer Terraform
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2
+        uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: 1.9.5
 
