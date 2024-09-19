@@ -24,17 +24,18 @@ jobs:
         with:
           terraform_version: 1.9.5
 
+      # Nettoyer les anciens plugins et initialiser Terraform
+      - name: Clean and Initialize Terraform
+        run: |
+          cd projet
+          rm -rf .terraform
+          terraform init
+
       # Sélectionner le workspace 'dev'
       - name: Select Workspace
         run: |
           cd projet
           terraform workspace select dev || terraform workspace new dev
-
-      # Initialiser Terraform
-      - name: Terraform Init
-        run: |
-          cd projet
-          terraform init
 
       # Terraform Plan
       - name: Terraform Plan
@@ -50,5 +51,5 @@ jobs:
         run: |
           cd projet
           terraform apply -auto-approve -var "DEV_CLIENT_ID=${{ secrets.DEV_CLIENT_ID }}" \
-                                        -var "DEV_CLIENT_SECRET=${{ secrets.DEV_CLIENT_SECRET }}" \
-                                        -var "DEV_AWS_REGION=${{ secrets.DEV_AWS_REGION }}"
+                                    -var "DEV_CLIENT_SECRET=${{ secrets.DEV_CLIENT_SECRET }}" \
+                                    -var "DEV_AWS_REGION=${{ secrets.DEV_AWS_REGION }}"
