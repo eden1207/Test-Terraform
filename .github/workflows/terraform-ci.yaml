@@ -45,6 +45,15 @@ jobs:
                          -var "DEV_CLIENT_SECRET=${{ secrets.DEV_CLIENT_SECRET }}" \
                          -var "DEV_AWS_REGION=${{ secrets.DEV_AWS_REGION }}"
 
+      # Terraform Destroy
+      - name: Terraform Destroy
+        if: github.ref == 'refs/heads/main'
+        run: |
+          cd projet
+          terraform destroy -auto-approve -var "DEV_CLIENT_ID=${{ secrets.DEV_CLIENT_ID }}" \
+                                    -var "DEV_CLIENT_SECRET=${{ secrets.DEV_CLIENT_SECRET }}" \
+                                    -var "DEV_AWS_REGION=${{ secrets.DEV_AWS_REGION }}"            
+
       # Terraform Apply
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main'
